@@ -9,9 +9,10 @@
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
     "baseUrl": ".",
-    "paths": {
-      "@/*": ["src/*"]
-    }
+    // "paths": {
+    //   "@/*": ["src/*"],
+
+    // }
   },
   "include": ["src/**/*","knexfile.ts"],
   "exclude": ["node_modules", "dist"],
