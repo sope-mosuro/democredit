@@ -15,8 +15,8 @@ Knex.js ORM
 MySQL
 
 
-Database Schema (ER Diagram)
-(demo-credit-er-diagram_1.png)  
+Database Schema
+![ER Diagram](demo-credit-er-diagram_1(1).png)  
 
 
 Setup Instructions
@@ -25,5 +25,29 @@ Clone the Repository
 git clone https://github.com/sope-mosuro/demo-credit.git
 cd demo-credit
 
+
+Install dependencies:
+npm install
+
+Create a .env file in the root directory and configure the required environment variables.
+DB_HOST
+DB_USER
+DB_PASSWORD
+DB_NAME
+DB_PORT
+
+ADJUTOR_API_KEY
+JWT_SECRET
+PORT
+
+
+
+Run database migrations:
+npx knex migrate:latest
+
+
+Start the development server:
+npm run build
+npm start
 
 
