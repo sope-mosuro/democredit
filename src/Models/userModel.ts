@@ -16,6 +16,6 @@ export const createUser = async (user: Partial<User>): Promise<User> => {
   return newUser;
 };
 
-export const updateUserBlacklistStatus = async (id: number, isBlacklisted: boolean) => {
+export const updateUserBlacklistStatus = async (id:Number, isBlacklisted: boolean) => {
   return knex("users").where({ id }).update({ is_blacklisted: isBlacklisted });
 };

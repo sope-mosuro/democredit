@@ -1,90 +1,88 @@
-import { authenticateUser } from '../Middlewares/authMiddleware';
-import AuthService from '../Services/authService';
-import { Request } from 'express';
+import { authenticateUser } from "../Middlewares/authMiddleware";
+import AuthService from "../Services/authService";
+import { NextFunction, Request, Response } from "express";
 
 // Mock the AuthService
-jest.mock('../Services/authService');
+jest.mock("../Services/authService");
 
-type MockResponse = {
-  status: jest.Mock<MockResponse, [number]>;
-  json: jest.Mock<void, [unknown]>;
-  send: jest.Mock<void, [string]>;
-};
+describe("Auth Middleware", () => {
 
-describe('Auth Middleware', () => {
-  describe('authenticateUser', () => {
-    it('should successfully authenticate a user with a valid token', async () => {
-      // Mock the verifyToken method to return a user ID
-      const mockUserId = '12345';
-      (AuthService.verifyToken as jest.Mock).mockReturnValue(mockUserId);
+  const createMockResponse = () => {
+    const res: Partial<Response> = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn().mockReturnThis(),
+      sendStatus: jest.fn().mockReturnThis(),
+      send: jest.fn().mockReturnThis(),
+      jsonp: jest.fn().mockReturnThis(),
+      end: jest.fn().mockReturnThis(),
+     
+  };
+    return res as Response;
+  };
 
-      // Create a mock request with a valid token
-      const req: Partial<Request> = {
-        headers: { authorization: 'Bearer valid-token' },
-      };
+  it("should successfully authenticate a user with a valid token", async () => {
+    // Mock the verifyToken method to return a user ID
+    const mockUserId = "12345";
+    (AuthService.verifyToken as jest.Mock).mockReturnValue(mockUserId);
 
-      // Create a mock response
-      const res: MockResponse = {
-        status: jest.fn<MockResponse, [number]>(() => res),
-        json: jest.fn<void, [unknown]>(() => res),
-        send: jest.fn<void, [string]>(() => {}),
-      };
+    // Create mock request and response objects
+    const req = {
+      headers: { authorization: "Bearer valid-token" },
+      body:{},
+    } as Request;
+    const res = createMockResponse();
+    const next = jest.fn() as NextFunction;
 
-      // Call the middleware
-      await authenticateUser(req as Request, res as Response, jest.fn());
+    // Call the middleware function with all required arguments
+   authenticateUser(req, res, next);
 
-      // Assert that the response was sent with a 200 status
-      expect(res.status).toHaveBeenCalledWith(200);
-      expect(res.json).toHaveBeenCalledWith(
-        expect.objectContaining({ success: true })
-      );
+    // Assert that next was called with the user ID
+    expect(next).toHaveBeenCalledWith();
+
+     // Assert that the userId was set in the request body
+     expect(req.body.userId).toBe(mockUserId);
     });
+  
 
-    it('should fail to authenticate a user with an invalid token', async () => {
-      // Mock the verifyToken method to return null for invalid token
-      (AuthService.verifyToken as jest.Mock).mockReturnValue(null);
+  
 
-      // Create a mock request with an invalid token
-      const req: Partial<Request> = {
-        headers: { authorization: 'Bearer invalid-token' },
-      };
+  it("should fail to authenticate a user with an invalid token", async () => {
+    // Mock the verifyToken method to return null for invalid token
+    (AuthService.verifyToken as jest.Mock).mockReturnValue(null);
 
-      // Create a mock response
-      const res: MockResponse = {
-        status: jest.fn<MockResponse, [number]>(() => res),
-        json: jest.fn<void, [unknown]>(() => res),
-        send: jest.fn<void, [string]>(() => {}),
-      };
+    // Create mock request and response objects
+    const req = {
+      headers: { authorization: "Bearer invalid-token" },
+      body:{},
+    } as Request;
+    const res = createMockResponse();
+    const next = jest.fn() as NextFunction;
 
-      // Call the middleware
-      await authenticateUser(req as Request, res as Response, jest.fn());
+    // Call the middleware function with all required arguments
+    await authenticateUser(req, res, next);
 
-      // Assert that the response was sent with a 401 status
-      expect(res.status).toHaveBeenCalledWith(401);
-      expect(res.json).toHaveBeenCalledWith(
-        expect.objectContaining({ error: 'Invalid token' })
-      );
-    });
-
-    it('should handle a missing token in the request', async () => {
-      // Create a mock request without an authorization header
-      const req: Partial<Request> = {};
-
-      // Create a mock response
-      const res: MockResponse = {
-        status: jest.fn<MockResponse, [number]>(() => res),
-        json: jest.fn<void, [unknown]>(() => res),
-        send: jest.fn<void, [string]>(() => {}),
-      };
-
-      // Call the middleware
-      await authenticateUser(req as Request, res as Response, jest.fn());
-
-      // Assert that the response was sent with a 401 status
-      expect(res.status).toHaveBeenCalledWith(401);
-      expect(res.json).toHaveBeenCalledWith(
-        expect.objectContaining({ error: 'No token provided' })
-      );
-    });
+    // Assert that next was called with an error
+    expect(res.status).toHaveBeenCalledWith(401);
+     // Assert that the response json method was called with the error message
+     expect(res.json).toHaveBeenCalledWith({ message: 'Unauthorized - Invalid token' });
   });
+
+  it("should handle a missing token in the request", async () => {
+    // Create mock request and response objects
+    const req = {
+      headers:{},
+      body:{},
+    }as Request
+    const res = createMockResponse();
+    const next = jest.fn() as NextFunction;
+
+    // Call the middleware function with all required arguments
+    await authenticateUser(req, res, next);
+
+  // Assert that the response status was set to 401
+  expect(res.status).toHaveBeenCalledWith(401);
+  // Assert that the response json method was called with the error message
+  expect(res.json).toHaveBeenCalledWith({ message: 'Unauthorized - No token provided' });
+});
+
 });

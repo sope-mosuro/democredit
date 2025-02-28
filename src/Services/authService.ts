@@ -4,8 +4,8 @@ const SECRET_KEY = process.env.JWT_SECRET as string;
 
 class AuthService {
   // Generate a faux token
-  static generateToken(userId: string): string {
-    return jwt.sign({ userId }, SECRET_KEY, { expiresIn: '3h' });
+  static generateToken(userId: number): string {
+    return jwt.sign({ userId :userId.toString() }, SECRET_KEY, { expiresIn: '3h' });
   }
 
   // Validate the faux token

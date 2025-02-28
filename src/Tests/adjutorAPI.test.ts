@@ -1,41 +1,39 @@
 import axios from "axios";
 import { checkUserRisk } from "../Services/adjutorServices";
 import "jest";
-import { describe, it } from "node:test";
 
 // Mock axios
 jest.mock("axios");
 
 describe("AdjutorService", () => {
   describe("checkUserRisk", () => {
-    it("should return isRisky: true for high risk users", async () => {
+    it("should return isRisky: true for blacklisted user", async () => {
       const mockResponse = {
         data: {
           data: {
-            past_due_loan_amount_due: 6000,
+            karma_identity: "email@example.com",
+            reason: "User is blacklisted",
           },
         },
       };
 
       (axios.post as jest.Mock).mockResolvedValue(mockResponse);
 
-      const result = await checkUserRisk("123");
+      const result = await checkUserRisk("email@example.com");
       expect(result.isRisky).toBe(true);
-      expect(result.reason).toMatch(/past due loans/);
+      expect(result.reason).toMatch(/User is blacklisted/);
     });
 
-    it("should return isRisky: false for low risk users", async () => {
+    it("should return isRisky: false for non-blacklisted user", async () => {
       const mockResponse = {
         data: {
-          data: {
-            past_due_loan_amount_due: 4000,
-          },
+          data: null,
         },
       };
 
       (axios.post as jest.Mock).mockResolvedValue(mockResponse);
 
-      const result = await checkUserRisk("123");
+      const result = await checkUserRisk("email@example.com");
       expect(result.isRisky).toBe(false);
     });
 
@@ -43,7 +41,7 @@ describe("AdjutorService", () => {
       const error = new Error("Network Error");
       (axios.post as jest.Mock).mockRejectedValue(error);
 
-      await expect(checkUserRisk("123")).rejects.toThrow(
+      await expect(checkUserRisk("email@example.com")).rejects.toThrow(
         "Failed to check user risk status"
       );
     });
