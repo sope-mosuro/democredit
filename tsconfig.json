@@ -10,8 +10,7 @@
     "skipLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"],
-      "#knexfile": ["knexfile.ts"]
+      "@/*": ["src/*"]
     }
   },
   "include": ["src/**/*","knexfile.ts"],
