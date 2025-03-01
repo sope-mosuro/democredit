@@ -20,6 +20,16 @@ const config: { [key: string]: Knex.Config } = {
       directory: "../database/seeds",
     },
   }, 
+  production: {
+    client: "mysql2",
+    connection: process.env.DATABASE_URL, 
+    migrations: {
+      directory: "../../database/migrations",
+    },
+    seeds: {
+      directory: "../../database/seeds",
+    },
+  },
 };
 
  module.exports = config;
