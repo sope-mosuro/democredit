@@ -22,7 +22,7 @@ const config: { [key: string]: Knex.Config } = {
   }, 
   production: {
     client: "mysql2",
-    connection: process.env.DATABASE_URL, 
+    connection:  process.env.JAWSDB_URL, 
     migrations: {
       directory: "../database/migrations",
     },
