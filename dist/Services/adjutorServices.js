@@ -17,7 +17,7 @@ const axios_1 = __importDefault(require("axios"));
 const ADJUTOR_API_URL = 'https://adjutor.lendsqr.com/v2/verification/karma';
 const checkUserRisk = (identity) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const response = yield axios_1.default.post(`${ADJUTOR_API_URL}/${identity}`, {}, { headers: { Authorization: `Bearer ${process.env.ADJUTOR_API_KEY}` } });
+        const response = yield axios_1.default.get(`${ADJUTOR_API_URL}/${identity}`, { headers: { Authorization: `Bearer ${process.env.ADJUTOR_API_KEY}` } });
         const userData = response.data.data;
         if (userData) {
             return { isRisky: true, reason: userData.reason || "User is blacklisted" };

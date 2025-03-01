@@ -19,6 +19,7 @@ const walletModel_1 = require("../Models/walletModel");
 const getWallet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { userId } = req.body;
+        // Check if wallet exists for user; if not, create a new one
         let wallet = yield (0, walletModel_1.getWalletByUserId)(userId);
         if (!wallet)
             wallet = yield (0, walletModel_1.createWallet)(userId);

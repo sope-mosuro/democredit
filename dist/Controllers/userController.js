@@ -24,6 +24,7 @@ const authService_1 = __importDefault(require("../Services/authService"));
 const registerUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { name, email, phone, bvn } = req.body;
+        // Check if user is blacklisted using Adjutor service
         const riskResult = yield (0, adjutorServices_1.checkUserRisk)(email);
         const isBlacklisted = riskResult.isRisky;
         if (isBlacklisted) {
@@ -31,6 +32,7 @@ const registerUser = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         }
         const user = yield (0, userModel_1.createUser)({ name, email, phone, bvn });
         yield (0, userModel_1.updateUserBlacklistStatus)(user.id, isBlacklisted);
+        // Generate authentication token after user has been checked
         const token = authService_1.default.generateToken(user.id);
         return res.status(201).json({ message: "User registered", user, token });
     }

@@ -9,7 +9,7 @@
     "heroku-postbuild": "npm run build",
     "migrate": "npx knex migrate:latest --knexfile ./dist/config/knexfile.js --env production",
     "start": "node dist/Server.js",
-    "test": "jest --config jest.config.js"
+    "test":"jest --config jest.config.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
