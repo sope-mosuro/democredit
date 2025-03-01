@@ -3,7 +3,7 @@
     "target": "ES6",
     "module": "CommonJS",
     "outDir": "./dist",
-    "rootDir": ".",
+    "rootDir": "./src",
     "strict": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
@@ -11,7 +11,7 @@
     "baseUrl": ".",
     
   },
-  "include": ["src/**/*","knexfile.ts"],
+  "include": ["src/**/*","src/config/knexfile.ts"],
   
   "exclude": ["node_modules", "dist"],
   
