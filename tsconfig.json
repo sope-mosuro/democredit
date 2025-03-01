@@ -12,7 +12,7 @@
     "baseUrl": ".",
     
   },
-  "include": ["src/**/*","database/migrations"],
+  "include": ["src/**/*","src/database/migrations"],
   
   "exclude": ["node_modules", "dist"],
   
