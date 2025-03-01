@@ -8,7 +8,8 @@ interface Wallet {
 }
 
 export const createWallet = async (userId: number): Promise<Wallet> => {
-  const [wallet] = await knex("wallets").insert({ user_id: userId, balance: 0 }).returning("*");
+  const [walletId] = await knex("wallets").insert({ user_id: userId, balance: 0 });
+  const wallet = await knex("wallets").where({ id: walletId }).first();
   return wallet;
 };
 

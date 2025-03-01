@@ -15,8 +15,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateUserBlacklistStatus = exports.createUser = void 0;
 const Database_1 = __importDefault(require("../config/Database"));
 const createUser = (user) => __awaiter(void 0, void 0, void 0, function* () {
-    const [newUser] = yield (0, Database_1.default)("users").insert(user).returning("*");
-    return newUser;
+    const [userId] = yield (0, Database_1.default)("users").insert(user);
+    const createdUser = yield (0, Database_1.default)("users").where({ id: userId }).first();
+    return createdUser;
 });
 exports.createUser = createUser;
 const updateUserBlacklistStatus = (id, isBlacklisted) => __awaiter(void 0, void 0, void 0, function* () {

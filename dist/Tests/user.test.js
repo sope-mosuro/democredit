@@ -15,11 +15,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const userController_1 = require("../Controllers/userController");
 const userModel_1 = require("../Models/userModel");
 const adjutorServices_1 = require("../Services/adjutorServices");
+const walletModel_1 = require("../Models/walletModel");
 const authService_1 = __importDefault(require("../Services/authService"));
 // Mock dependencies
 jest.mock("../Models/userModel");
 jest.mock("../Services/adjutorServices");
 jest.mock("../Services/authService");
+jest.mock("../Models/walletModel");
 describe("UserController", () => {
     const createMockResponse = () => {
         const res = {
@@ -33,13 +35,19 @@ describe("UserController", () => {
         return res;
     };
     describe("registerUser", () => {
-        it("should successfully register a user and update blacklist status", () => __awaiter(void 0, void 0, void 0, function* () {
+        it("should successfully register a user, create a wallet, and update blacklist status", () => __awaiter(void 0, void 0, void 0, function* () {
             const mockUser = {
                 id: 1,
                 name: "John Doe",
                 email: "john@example.com",
                 phone: "1234567890",
                 bvn: "12345678901",
+                created_at: new Date(),
+            };
+            const mockWallet = {
+                id: 1,
+                user_id: 1,
+                balance: 0,
                 created_at: new Date(),
             };
             const mockRiskResult = {
@@ -50,6 +58,7 @@ describe("UserController", () => {
             adjutorServices_1.checkUserRisk.mockResolvedValue(mockRiskResult);
             userModel_1.createUser.mockResolvedValue(mockUser);
             userModel_1.updateUserBlacklistStatus.mockResolvedValue(undefined);
+            walletModel_1.createWallet.mockResolvedValue(mockWallet);
             authService_1.default.generateToken.mockReturnValue(mockToken);
             const req = {
                 body: {
@@ -69,11 +78,13 @@ describe("UserController", () => {
                 bvn: "12345678901",
             });
             expect(userModel_1.updateUserBlacklistStatus).toHaveBeenCalledWith(1, false);
+            expect(walletModel_1.createWallet).toHaveBeenCalledWith(1);
             expect(authService_1.default.generateToken).toHaveBeenCalledWith(1);
             expect(res.status).toHaveBeenCalledWith(201);
             expect(res.json).toHaveBeenCalledWith({
                 message: "User registered",
                 user: mockUser,
+                wallet: mockWallet,
                 token: mockToken,
             });
         }));
@@ -97,6 +108,7 @@ describe("UserController", () => {
             expect(adjutorServices_1.checkUserRisk).toHaveBeenCalledWith("jane@example.com");
             expect(userModel_1.createUser).not.toHaveBeenCalled(); // User should not be created
             expect(userModel_1.updateUserBlacklistStatus).not.toHaveBeenCalled(); // No update to blacklist status
+            expect(walletModel_1.createWallet).not.toHaveBeenCalled(); // Wallet should not be created
             expect(res.status).toHaveBeenCalledWith(400); // Assuming we want to return a 400 status for blacklisted users
             expect(res.json).toHaveBeenCalledWith({
                 message: "User is blacklisted and cannot be registered",

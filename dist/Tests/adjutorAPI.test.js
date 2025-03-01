@@ -28,25 +28,25 @@ describe("AdjutorService", () => {
                     },
                 },
             };
-            axios_1.default.post.mockResolvedValue(mockResponse);
+            axios_1.default.get.mockResolvedValue(mockResponse);
             const result = yield (0, adjutorServices_1.checkUserRisk)("email@example.com");
             expect(result.isRisky).toBe(true);
             expect(result.reason).toMatch(/User is blacklisted/);
         }));
-        it("should return isRisky: false for non-blacklisted user", () => __awaiter(void 0, void 0, void 0, function* () {
+        it("should handle API errors", () => __awaiter(void 0, void 0, void 0, function* () {
+            const error = new Error("Network Error");
+            axios_1.default.get.mockRejectedValue(error);
+            yield expect((0, adjutorServices_1.checkUserRisk)("email@example.com")).rejects.toThrow("Failed to check user risk status");
+        }));
+        it("should return isRisky: false if no user data is found", () => __awaiter(void 0, void 0, void 0, function* () {
             const mockResponse = {
                 data: {
                     data: null,
                 },
             };
-            axios_1.default.post.mockResolvedValue(mockResponse);
+            axios_1.default.get.mockResolvedValue(mockResponse);
             const result = yield (0, adjutorServices_1.checkUserRisk)("email@example.com");
             expect(result.isRisky).toBe(false);
-        }));
-        it("should handle API errors", () => __awaiter(void 0, void 0, void 0, function* () {
-            const error = new Error("Network Error");
-            axios_1.default.post.mockRejectedValue(error);
-            yield expect((0, adjutorServices_1.checkUserRisk)("email@example.com")).rejects.toThrow("Failed to check user risk status");
         }));
     });
 });

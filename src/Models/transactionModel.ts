@@ -9,6 +9,7 @@ export interface Transaction {
 }
 
 export const createTransaction = async (transaction: Partial<Transaction>): Promise<Transaction> => {
-  const [newTransaction] = await knex<Transaction>("transactions").insert(transaction).returning("*");
+  const [transactionId] = await knex("transactions").insert(transaction);
+  const newTransaction = await knex("transactions").where({ id: transactionId }).first();
   return newTransaction;
 };

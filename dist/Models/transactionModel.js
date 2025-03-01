@@ -15,7 +15,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.createTransaction = void 0;
 const Database_1 = __importDefault(require("../config/Database"));
 const createTransaction = (transaction) => __awaiter(void 0, void 0, void 0, function* () {
-    const [newTransaction] = yield (0, Database_1.default)("transactions").insert(transaction).returning("*");
+    const [transactionId] = yield (0, Database_1.default)("transactions").insert(transaction);
+    const newTransaction = yield (0, Database_1.default)("transactions").where({ id: transactionId }).first();
     return newTransaction;
 });
 exports.createTransaction = createTransaction;

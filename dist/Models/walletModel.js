@@ -15,7 +15,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateWalletBalance = exports.getWalletByUserId = exports.createWallet = void 0;
 const Database_1 = __importDefault(require("../config/Database"));
 const createWallet = (userId) => __awaiter(void 0, void 0, void 0, function* () {
-    const [wallet] = yield (0, Database_1.default)("wallets").insert({ user_id: userId, balance: 0 }).returning("*");
+    const [walletId] = yield (0, Database_1.default)("wallets").insert({ user_id: userId, balance: 0 });
+    const wallet = yield (0, Database_1.default)("wallets").where({ id: walletId }).first();
     return wallet;
 });
 exports.createWallet = createWallet;

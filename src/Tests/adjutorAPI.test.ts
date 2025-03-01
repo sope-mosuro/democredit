@@ -17,33 +17,33 @@ describe("AdjutorService", () => {
         },
       };
 
-      (axios.post as jest.Mock).mockResolvedValue(mockResponse);
+      (axios.get as jest.Mock).mockResolvedValue(mockResponse);
 
       const result = await checkUserRisk("email@example.com");
       expect(result.isRisky).toBe(true);
       expect(result.reason).toMatch(/User is blacklisted/);
     });
 
-    it("should return isRisky: false for non-blacklisted user", async () => {
+    it("should handle API errors", async () => {
+      const error = new Error("Network Error");
+      (axios.get as jest.Mock).mockRejectedValue(error);
+
+      await expect(checkUserRisk("email@example.com")).rejects.toThrow(
+        "Failed to check user risk status"
+      );
+    });
+
+    it("should return isRisky: false if no user data is found", async () => {
       const mockResponse = {
         data: {
           data: null,
         },
       };
 
-      (axios.post as jest.Mock).mockResolvedValue(mockResponse);
+      (axios.get as jest.Mock).mockResolvedValue(mockResponse);
 
       const result = await checkUserRisk("email@example.com");
       expect(result.isRisky).toBe(false);
-    });
-
-    it("should handle API errors", async () => {
-      const error = new Error("Network Error");
-      (axios.post as jest.Mock).mockRejectedValue(error);
-
-      await expect(checkUserRisk("email@example.com")).rejects.toThrow(
-        "Failed to check user risk status"
-      );
     });
   });
 });

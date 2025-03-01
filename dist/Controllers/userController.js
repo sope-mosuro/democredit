@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.registerUser = void 0;
 const userModel_1 = require("../Models/userModel");
 const adjutorServices_1 = require("../Services/adjutorServices");
+const walletModel_1 = require("../Models/walletModel");
 const authService_1 = __importDefault(require("../Services/authService"));
 /**
  * @desc create and register a user
@@ -34,7 +35,8 @@ const registerUser = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         yield (0, userModel_1.updateUserBlacklistStatus)(user.id, isBlacklisted);
         // Generate authentication token after user has been checked
         const token = authService_1.default.generateToken(user.id);
-        return res.status(201).json({ message: "User registered", user, token });
+        const wallet = yield (0, walletModel_1.createWallet)(user.id);
+        return res.status(201).json({ message: "User registered", user, wallet, token });
     }
     catch (error) {
         return res.status(500).json({ message: "Error registering user" });
