@@ -9,7 +9,7 @@ import { getWalletByUserId, createWallet } from "../Models/walletModel";
 export const getWallet = async (req: Request, res: Response) => {
   try {
     const { userId } = req.body;
-    
+    // Check if wallet exists for user; if not, create a new one
     let wallet = await getWalletByUserId(userId);
     if (!wallet) wallet = await createWallet(userId);
 

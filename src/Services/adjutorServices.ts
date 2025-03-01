@@ -29,9 +29,8 @@ interface KarmaLookupResponse {
 
 export const checkUserRisk = async (identity: string): Promise<{ isRisky: boolean; reason?: string }> => {
   try {
-    const response = await axios.post<KarmaLookupResponse>(
+    const response = await axios.get<KarmaLookupResponse>(
       `${ADJUTOR_API_URL}/${identity}`,
-      {},
       { headers: { Authorization: `Bearer ${process.env.ADJUTOR_API_KEY}` } }
     );
 
