@@ -11,7 +11,7 @@
     "baseUrl": ".",
     
   },
-  "include": ["src/**/*","src/config/knexfile.ts"],
+  "include": ["src/**/*"],
   
   "exclude": ["node_modules", "dist"],
   
