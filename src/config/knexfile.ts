@@ -19,20 +19,7 @@ const config: { [key: string]: Knex.Config } = {
     seeds: {
       directory: "../../database/seeds",
     },
-  },
-  production: {
-    client: "pg",
-    connection: {
-      connectionString: process.env.DATABASE_URL,
-      ssl: { rejectUnauthorized: false },
-    },
-    migrations: {
-      directory: "../../database/migrations",
-    },
-    seeds: {
-      directory: "../../database/seeds",
-    },
-  },
+  }, 
 };
 
 export default config;
