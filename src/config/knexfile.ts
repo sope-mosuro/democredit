@@ -24,10 +24,10 @@ const config: { [key: string]: Knex.Config } = {
     client: "mysql2",
     connection: process.env.DATABASE_URL, 
     migrations: {
-      directory: "../../database/migrations",
+      directory: "../database/migrations",
     },
     seeds: {
-      directory: "../../database/seeds",
+      directory: "../database/seeds",
     },
   },
 };
