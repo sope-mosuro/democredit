@@ -22,7 +22,8 @@
     "knex": "^2.4.2",
     "morgan": "^1.10.0",
     "mysql2": "^3.6.0",
-    "ts-node": "^10.9.2"
+    "ts-node": "^10.9.2",
+    "pg": "^8.11.3"
   },
   "devDependencies": {
     "@types/axios": "^0.14.4",
