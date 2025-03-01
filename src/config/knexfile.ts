@@ -19,6 +19,10 @@ const config: { [key: string]: Knex.Config } = {
     seeds: {
       directory: "../database/seeds",
     },
+    pool: {
+      min: 2,   
+      max: 10,  
+    },
   }, 
   production: {
     client: "mysql2",
