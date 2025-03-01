@@ -3,6 +3,8 @@ node_modules/
 # ignore environment variables
 .env
 
+dist/
+
 # Database-related files
 database/migrations/  
 database/seeds/
