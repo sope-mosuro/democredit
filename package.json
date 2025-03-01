@@ -5,7 +5,7 @@
   "main": "dist/server.js",
   "scripts": {
     "dev": "nodemon --exec ts-node src/Server.ts",
-    "build": "tsc && cp -r database dist/",
+    "build": "tsc",    
     "heroku-postbuild": "npm run build",
     "start": "node dist/Server.js",
     "test": "jest --config jest.config.js"
