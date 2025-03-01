@@ -6,8 +6,9 @@ node_modules/
 dist/
 
 # Database-related files
-database/migrations/  
-database/seeds/
+database/*
+!database/migrations
+!database/seeds
 
 .vscode/*
 
