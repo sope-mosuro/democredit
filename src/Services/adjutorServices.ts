@@ -35,7 +35,7 @@ export const checkUserRisk = async (identity: string): Promise<{ isRisky: boolea
     );
 
     const userData = response.data.data;
- console.log(response.data)
+    console.log(response.data)
     if (userData) {
       return { isRisky: true, reason: userData.reason || "User is blacklisted" };
     }
